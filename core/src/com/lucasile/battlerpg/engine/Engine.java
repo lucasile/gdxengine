@@ -30,4 +30,8 @@ public class Engine extends Game {
 	public void dispose() {
 		gameScreen.dispose();
 	}
+
+	public GameScreen getGameScreen() {
+		return gameScreen;
+	}
 }

@@ -14,6 +14,8 @@ public class DesktopLauncher {
 		config.width = GameSettings.CAMERA_WIDTH;
 		config.height = GameSettings.CAMERA_HEIGHT;
 
+		config.vSyncEnabled = true;
+
 		RPGGame game = new RPGGame();
 
 		new LwjglApplication(game.getEngine(), config);

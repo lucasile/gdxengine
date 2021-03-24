@@ -40,6 +40,11 @@ public class RenderComponent extends Component {
 
     }
 
+    @Override
+    public void dispose() {
+        sprite.dispose();
+    }
+
     public TransformComponent getTransform() {
         return transform;
     }

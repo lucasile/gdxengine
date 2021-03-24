@@ -6,12 +6,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
 import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
 import com.lucasile.battlerpg.engine.ecs.entity.Entity;
+import com.lucasile.battlerpg.engine.settings.GameSettings;
 
-public class TestEntity extends Entity {
+public class BackgroundTest extends Entity {
 
-    public TestEntity(Vector3 position) {
-        Texture texture = new Texture("badlogic.jpg");
-        TransformComponent transform = new TransformComponent(this, position, new Vector2(texture.getWidth(), texture.getHeight()));
+    public BackgroundTest() {
+        Texture texture = new Texture("sky.jpeg");
+        TransformComponent transform = new TransformComponent(this, new Vector3(0, 0, -10), new Vector2(GameSettings.CAMERA_WIDTH, GameSettings.CAMERA_HEIGHT));
         RenderComponent renderComponent = new RenderComponent(this, texture);
         addComponents(transform, renderComponent);
     }
@@ -23,6 +24,7 @@ public class TestEntity extends Entity {
 
     @Override
     protected void onCreate() {
+
     }
 
     @Override

@@ -5,34 +5,23 @@ import java.util.Set;
 
 public class EntityManager {
 
-    private static EntityManager instance;
+    private static Set<Entity> entities = new HashSet<>();
 
-    private Set<Entity> entities;
-
-    public EntityManager() {
-        instance = this;
-        entities = new HashSet<>();
-    }
-
-    public void updateEntities() {
+    public static void updateEntities() {
         entities.forEach(Entity::updateEntity);
     }
 
-    public void addEntity(Entity entity) {
+    public static void addEntity(Entity entity) {
         entity.create();
         entities.add(entity);
     }
 
-    public void destroyEntity(Entity entity) {
+    public static void destroyEntity(Entity entity) {
         entity.destroy();
         entities.remove(entity);
     }
 
-    public Set<Entity> getEntities() {
+    public static Set<Entity> getEntities() {
         return entities;
-    }
-
-    public static EntityManager getInstance() {
-        return instance;
     }
 }

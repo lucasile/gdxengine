@@ -1,7 +1,9 @@
 package com.lucasile.battlerpg.engine.ecs.entity;
 
 import com.lucasile.battlerpg.engine.ecs.component.Component;
+import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
 
+import javax.xml.crypto.dsig.Transform;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +12,8 @@ import java.util.List;
 public abstract class Entity {
 
     private List<Component> components;
+
+    private TransformComponent transform;
 
     public Entity() {
         init();
@@ -41,7 +45,12 @@ public abstract class Entity {
 
     //DESTROY IS CALLED WHEN ENTITY IS REMOVED FROM THE ENTITY MANAGER
     public void destroy() {
+        disposeComponents();
         onDestroy();
+    }
+
+    public void disposeComponents() {
+        components.forEach(Component::dispose);
     }
 
     private void updateComponents() {
@@ -52,6 +61,9 @@ public abstract class Entity {
     }
 
     public void addComponent(Component component) {
+        if (component instanceof TransformComponent) {
+            transform = (TransformComponent) component;
+        }
         components.add(component);
         activateComponent(component);
     }
@@ -74,4 +86,11 @@ public abstract class Entity {
         return components.stream().filter(component -> component.getName().equals(componentString)).findFirst().orElse(null);
     }
 
+    public List<Component> getComponents() {
+        return components;
+    }
+
+    public TransformComponent getTransform() {
+        return transform;
+    }
 }

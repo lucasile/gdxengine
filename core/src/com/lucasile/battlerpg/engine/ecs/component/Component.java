@@ -26,9 +26,7 @@ public abstract class Component {
 
     public void onDeactivate() {}
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
-    }
+    public void dispose() {}
 
     public boolean isActive() {
         return active;
