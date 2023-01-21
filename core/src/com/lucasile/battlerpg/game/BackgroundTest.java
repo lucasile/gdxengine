@@ -12,7 +12,7 @@ public class BackgroundTest extends Entity {
 
     public BackgroundTest() {
         Texture texture = new Texture("sky.jpeg");
-        TransformComponent transform = new TransformComponent(this, new Vector3(0, 0, -10), new Vector2(GameSettings.CAMERA_WIDTH, GameSettings.CAMERA_HEIGHT));
+        TransformComponent transform = new TransformComponent(this, new Vector3(100, 100, -1), new Vector2(GameSettings.CAMERA_WIDTH, GameSettings.CAMERA_HEIGHT));
         RenderComponent renderComponent = new RenderComponent(this, texture);
         addComponents(transform, renderComponent);
     }

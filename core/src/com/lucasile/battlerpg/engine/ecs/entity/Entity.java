@@ -54,10 +54,10 @@ public abstract class Entity {
     }
 
     private void updateComponents() {
-        components.forEach(component -> {
+        for (Component component : components) {
             if (component.isActive())
                 component.update();
-        });
+        }
     }
 
     public void addComponent(Component component) {
