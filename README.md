@@ -1,1 +1,3 @@
-# gdxrpg
+# GDXEngine
+
+Engine for libgdx in Java. Primary use is implementing ECS system and render queue so far. 
