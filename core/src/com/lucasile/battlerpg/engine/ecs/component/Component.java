@@ -4,13 +4,10 @@ import com.lucasile.battlerpg.engine.ecs.entity.Entity;
 
 public abstract class Component {
 
-    private Entity entity;
-
     private String name;
     private boolean active;
 
-    public Component(Entity entity, String name) {
-        this.entity = entity;
+    public Component(String name) {
         this.name = name;
         this.active = true;
     }
@@ -34,10 +31,6 @@ public abstract class Component {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    protected Entity getEntity() {
-        return entity;
     }
 
     public String getName() {

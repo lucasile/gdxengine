@@ -4,34 +4,27 @@ import com.lucasile.battlerpg.engine.ecs.component.Component;
 import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
 
 import javax.xml.crypto.dsig.Transform;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public abstract class Entity {
+public class Entity {
 
     private List<Component> components;
 
+    // used for O(1) lookup when having string. Useful once we have many components.
+    private Map<String, Component> componentMap;
+
     private TransformComponent transform;
 
-    public Entity() {
-        init();
-    }
-
     public Entity(Component... components) {
-        init();
-        Collections.addAll(this.components, components);
-    }
-
-    private void init() {
-        components = new ArrayList<>();
+        this.components = new ArrayList<>();
+        componentMap = new HashMap<>();
         onCreate();
+        addComponents(components);
     }
 
-    protected abstract void update();
-    protected abstract void onCreate();
-    protected abstract void onDestroy();
+    protected void update() {}
+    protected void onCreate() {};
+    protected void onDestroy() {};
 
     public void updateEntity() {
         update();
@@ -54,10 +47,10 @@ public abstract class Entity {
     }
 
     private void updateComponents() {
-        for (Component component : components) {
+        components.forEach(component -> {
             if (component.isActive())
                 component.update();
-        }
+        });
     }
 
     public void addComponent(Component component) {
@@ -65,7 +58,17 @@ public abstract class Entity {
             transform = (TransformComponent) component;
         }
         components.add(component);
+        componentMap.put(component.getName(), component);
         activateComponent(component);
+    }
+
+    public void removeComponent(Component component) {
+        if (component instanceof TransformComponent) {
+            transform = null;
+        }
+        components.remove(component);
+        componentMap.remove(component.getName());
+        deactivateComponent(component);
     }
 
     public void addComponents(Component... components) {
@@ -83,7 +86,7 @@ public abstract class Entity {
     }
 
     public Component getComponent(String componentString) {
-        return components.stream().filter(component -> component.getName().equals(componentString)).findFirst().orElse(null);
+        return componentMap.getOrDefault(componentString, null);
     }
 
     public List<Component> getComponents() {
@@ -93,4 +96,5 @@ public abstract class Entity {
     public TransformComponent getTransform() {
         return transform;
     }
+
 }

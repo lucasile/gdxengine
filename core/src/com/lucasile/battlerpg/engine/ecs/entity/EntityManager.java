@@ -8,9 +8,7 @@ public class EntityManager {
     private static Set<Entity> entities = new HashSet<>();
 
     public static void updateEntities() {
-        for (Entity entity : entities) {
-            entity.updateEntity();
-        }
+        entities.forEach(Entity::updateEntity);
     }
 
     public static void addEntity(Entity entity) {

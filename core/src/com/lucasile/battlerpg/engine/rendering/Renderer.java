@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
 import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
 import com.lucasile.battlerpg.engine.rendering.groups.RenderGroup;
-import com.lucasile.battlerpg.engine.settings.GameSettings;
 
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -16,10 +14,10 @@ public class Renderer {
 
     private static Renderer instance;
 
-    private final SortedSet<RenderGroup> renderGroups;
-    private final SpriteBatch batch;
+    private final SortedSet<RenderGroup> uiRenderGroups;
+    private final SortedSet<RenderGroup> worldRenderGroups;
 
-    public Renderer(SpriteBatch batch) {
+    public Renderer() {
 
         if (instance == null) {
             instance = this;
@@ -27,54 +25,51 @@ public class Renderer {
             System.out.println("Cannot make more than one singleton instance (Renderer)");
         }
 
-        renderGroups = new TreeSet<>(new RenderGroupComparator());
-        this.batch = batch;
-    }
+        uiRenderGroups = new TreeSet<>(new RenderGroupComparator());
+        worldRenderGroups = new TreeSet<>(new RenderGroupComparator());
 
-    public void render() {
-        for (RenderGroup renderGroup : renderGroups) {
-            for (RenderComponent renderComponent : renderGroup.getRenderComponents()) {
-                if (renderComponent.isRenderingSprite()) {
-                    TransformComponent transform = renderComponent.getTransform();
-                    Vector3 position = transform.getPosition();
-                    Vector2 dimensions = transform.getDimensions() ;
-                    batch.draw(renderComponent.getSprite(), position.x, position.y, dimensions.x, dimensions.y);
-                }
+        for (BatchType batchType : BatchType.values()) {
+            RenderGroup renderGroup = new RenderGroup(batchType.getId());
+            if (batchType == BatchType.UI) {
+                uiRenderGroups.add(renderGroup);
+            } else {
+                worldRenderGroups.add(renderGroup);
             }
         }
     }
 
-    public void addRenderGroup(RenderGroup renderGroup) {
-        renderGroups.add(renderGroup);
-        sortRenderGroup();
+    public void renderUI(SpriteBatch batch) {
+        render(batch, uiRenderGroups);
     }
 
-    private void sortRenderGroup() {
+    public void renderWorld(SpriteBatch batch) {
+        render(batch, worldRenderGroups);
+    }
+
+    private void render(SpriteBatch batch, SortedSet<RenderGroup> renderGroups) {
         for (RenderGroup renderGroup : renderGroups) {
-            sortRenderComponents(renderGroup.getRenderComponents());
+
+            for (RenderComponent renderComponent : renderGroup.getActiveComponents()) {
+
+                TransformComponent transform = renderComponent.getTransform();
+                Vector3 position = transform.getPosition();
+                Vector2 dimensions = transform.getDimensions() ;
+
+                batch.draw(renderComponent.getSprite(), position.x, position.y, dimensions.x, dimensions.y);
+            }
         }
     }
 
-    public void sortRenderComponents(List<RenderComponent> renderComponents) {
-        // insertion sort
-        for (int i = 1; i < renderComponents.size(); i++) {
-
-            RenderComponent iComponent = renderComponents.get(i);
-
-            int j = i - 1;
-
-            while (j >= 0 && renderComponents.get(j).getTransform().getPosition().z > iComponent.getTransform().getPosition().z) {
-                renderComponents.set(j + 1, renderComponents.get(j));
-                j--;
-            }
-
-            renderComponents.set(j + 1, iComponent);
-
-        } 
+    public void addUIRenderGroup(RenderGroup renderGroup) {
+        uiRenderGroups.add(renderGroup);
     }
 
-    public RenderGroup getRenderGroup(int id) {
-        for (RenderGroup renderGroup : renderGroups) {
+    public void addWorldRenderGroup(RenderGroup renderGroup) {
+        worldRenderGroups.add(renderGroup);
+    }
+
+    public RenderGroup getWorldRenderGroup(int id) {
+        for (RenderGroup renderGroup : worldRenderGroups) {
             if (renderGroup.getId() == id) {
                 return renderGroup;
             }
@@ -82,8 +77,21 @@ public class Renderer {
         return null;
     }
 
-    public SortedSet<RenderGroup> getRenderGroups() {
-        return renderGroups;
+    public RenderGroup getUIRenderGroup(int id) {
+        for (RenderGroup renderGroup : uiRenderGroups) {
+            if (renderGroup.getId() == id) {
+                return renderGroup;
+            }
+        }
+        return null;
+    }
+
+    public SortedSet<RenderGroup> getUIRenderGroups() {
+        return uiRenderGroups;
+    }
+
+    public SortedSet<RenderGroup> getWorldRenderGroups() {
+        return worldRenderGroups;
     }
 
     public static Renderer getInstance() {

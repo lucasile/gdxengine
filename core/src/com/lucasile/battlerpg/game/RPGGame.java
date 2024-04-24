@@ -7,17 +7,22 @@ import com.badlogic.gdx.math.Vector3;
 import com.lucasile.battlerpg.engine.Engine;
 import com.lucasile.battlerpg.engine.camera.CameraWrapper;
 import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.UIComponent;
+import com.lucasile.battlerpg.engine.ecs.entity.Entity;
 import com.lucasile.battlerpg.engine.ecs.entity.EntityManager;
+import com.lucasile.battlerpg.engine.ecs.entity.builder.builders.TexturedEntityBuilder;
+import com.lucasile.battlerpg.engine.ecs.entity.builder.builders.UIEntityBuilder;
+import com.lucasile.battlerpg.engine.main.Main;
+import com.lucasile.battlerpg.engine.settings.GameSettings;
 
-public class RPGGame {
+public class RPGGame implements Main {
 
     private static RPGGame instance;
 
     private Engine engine;
 
-    private TestEntity entity;
+    private Entity entity;
     private TransformComponent transform;
-    private Vector2 position;
 
     private float moveSpeed;
 
@@ -25,7 +30,7 @@ public class RPGGame {
 
     public RPGGame() {
         instance = this;
-        engine = new Engine();
+        engine = new Engine(this);
         firstLoop = false;
         moveSpeed = 1000;
     }
@@ -33,11 +38,35 @@ public class RPGGame {
     public void update(float delta, CameraWrapper camera) {
 
         if (!firstLoop) {
-            EntityManager.addEntity(new BackgroundTest());
-            entity = new TestEntity(new Vector3(0, 500, 0));
+
+            EntityManager.addEntity(
+                    new UIEntityBuilder()
+                            .setPosition(new Vector3(50, 50, 50))
+                            .build()
+            );
+
+            EntityManager.addEntity(
+                    new TexturedEntityBuilder()
+                            .setTexture("sky.jpeg")
+                            .setPosition(new Vector3(100, 100, -1))
+                            .setDimensions(new Vector2(GameSettings.CAMERA_WIDTH, GameSettings.CAMERA_HEIGHT))
+                            .build()
+            );
+
+            entity = new TexturedEntityBuilder()
+                    .setPosition(new Vector3(0, 500, 0))
+                    .build();
+
             transform = (TransformComponent) entity.getComponent("TransformComponent");
+
             EntityManager.addEntity(entity);
-            EntityManager.addEntity(new TestEntity(new Vector3(50, 50, -2)));
+
+            EntityManager.addEntity(
+                    new TexturedEntityBuilder()
+                            .setPosition(new Vector3(50, 50, -2))
+                            .build()
+            );
+
             firstLoop = true;
             camera.bind(entity);
         }
@@ -61,7 +90,7 @@ public class RPGGame {
     }
 
     public Engine getEngine() {
-        return new Engine();
+        return engine;
     }
 
     public static RPGGame getInstance() {

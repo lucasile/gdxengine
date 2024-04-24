@@ -1,18 +1,20 @@
 package com.lucasile.battlerpg.engine.rendering.groups;
 
 import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
+import com.lucasile.battlerpg.engine.rendering.RenderComponentComparator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class RenderGroup {
 
     private int id;
-    private final List<RenderComponent> renderComponents;
+    private final Set<RenderComponent> renderComponents;
+    private final SortedSet<RenderComponent> activeComponents;
 
     public RenderGroup(int id) {
         this.id = id;
-        renderComponents = new ArrayList<>();
+        renderComponents = new HashSet<>();
+        activeComponents = new TreeSet<>(new RenderComponentComparator());
     }
 
     public void addToRenderGroup(RenderComponent component) {
@@ -23,6 +25,14 @@ public class RenderGroup {
         renderComponents.remove(component);
     }
 
+    public void addActiveGroup(RenderComponent component) {
+        activeComponents.add(component);
+    }
+
+    public void removeActiveGroup(RenderComponent component) {
+        activeComponents.remove(component);
+    }
+
     public int getId() {
         return id;
     }
@@ -31,8 +41,12 @@ public class RenderGroup {
         this.id = id;
     }
 
-    public List<RenderComponent> getRenderComponents() {
+    public Set<RenderComponent> getRenderComponents() {
         return renderComponents;
+    }
+
+    public SortedSet<RenderComponent> getActiveComponents() {
+        return activeComponents;
     }
 
 }

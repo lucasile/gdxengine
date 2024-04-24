@@ -10,14 +10,13 @@ public class CameraWrapper extends OrthographicCamera {
 
     private Entity boundChild;
     private boolean bound;
+    private int width, height, zIndex;
 
-    private int width, height, zindex;
-
-    public CameraWrapper(int width, int height, int zindex) {
+    public CameraWrapper(int width, int height, int zIndex) {
         super(width, height);
         this.width = width;
         this.height = height;
-        this.zindex = zindex;
+        this.zIndex = zIndex;
         bound = false;
     }
 
@@ -37,7 +36,7 @@ public class CameraWrapper extends OrthographicCamera {
         Vector3 childPosition = boundChild.getTransform().getPosition();
         Vector2 dimensions = boundChild.getTransform().getDimensions();
 
-        position.set(childPosition.x + dimensions.x / 2, childPosition.y + dimensions.y / 2, zindex);
+        position.set(childPosition.x + dimensions.x / 2, childPosition.y + dimensions.y / 2, zIndex);
 
     }
 
@@ -79,4 +78,17 @@ public class CameraWrapper extends OrthographicCamera {
     public int getHeight() {
         return height;
     }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
+    }
+
 }

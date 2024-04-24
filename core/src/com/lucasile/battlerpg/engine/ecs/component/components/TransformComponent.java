@@ -10,14 +10,14 @@ public class TransformComponent extends Component {
     private Vector3 position;
     private Vector2 dimensions;
 
-    public TransformComponent(Entity entity, Vector3 position, Vector2 dimensions) {
-        super(entity, "TransformComponent");
+    public TransformComponent(Vector3 position, Vector2 dimensions) {
+        super("TransformComponent");
         this.position = position;
         this.dimensions = dimensions;
     }
 
-    public TransformComponent(Entity entity) {
-        super(entity, "TransformComponent");
+    public TransformComponent() {
+        super("TransformComponent");
         this.position = Vector3.Zero;
         this.dimensions = Vector2.Zero;
     }

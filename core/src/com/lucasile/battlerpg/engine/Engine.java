@@ -2,17 +2,25 @@ package com.lucasile.battlerpg.engine;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.lucasile.battlerpg.engine.main.Main;
 import com.lucasile.battlerpg.engine.screens.GameScreen;
 
 public class Engine extends Game {
 
 	private GameScreen gameScreen;
-	private SpriteBatch batch;
+	private SpriteBatch worldBatch;
+	private SpriteBatch uiBatch;
+	private Main main;
+
+	public Engine(Main main) {
+		this.main = main;
+	}
 
 	@Override
 	public void create() {
-		batch = new SpriteBatch();
-		gameScreen = new GameScreen(batch);
+		worldBatch = new SpriteBatch();
+		uiBatch = new SpriteBatch();
+		gameScreen = new GameScreen(main, worldBatch, uiBatch);
 		setScreen(gameScreen);
 	}
 
