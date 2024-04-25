@@ -1,14 +1,22 @@
 package com.lucasile.battlerpg.engine.ecs.entity.builder.builders;
 
-import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
-import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
-import com.lucasile.battlerpg.engine.ecs.component.components.UIComponent;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.RenderComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.UIComponent;
 
 public class UIEntityBuilder extends TexturedEntityBuilder {
 
+    private Camera camera;
+
+    public UIEntityBuilder(Camera camera) {
+        this.camera = camera;
+    }
+
     @Override
-    protected RenderComponent createRenderComponent(TransformComponent transform) {
-        return new UIComponent(transform, texture);
+    protected RenderComponent createRenderComponent(Vector3 position, Vector2 dimensions) {
+        return new UIComponent(position, dimensions, texture, camera);
     }
 
 }

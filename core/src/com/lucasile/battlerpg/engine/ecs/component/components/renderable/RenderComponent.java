@@ -1,17 +1,16 @@
-package com.lucasile.battlerpg.engine.ecs.component.components;
+package com.lucasile.battlerpg.engine.ecs.component.components.renderable;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.lucasile.battlerpg.engine.ecs.component.Component;
-import com.lucasile.battlerpg.engine.ecs.entity.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.lucasile.battlerpg.engine.rendering.BatchType;
 import com.lucasile.battlerpg.engine.rendering.Renderer;
 import com.lucasile.battlerpg.engine.rendering.groups.RenderGroup;
 
-public class RenderComponent extends Component {
+public class RenderComponent extends TransformComponent {
 
     protected Renderer renderer;
 
-    private TransformComponent transform;
     private Texture sprite;
 
     private RenderGroup renderGroup;
@@ -22,9 +21,11 @@ public class RenderComponent extends Component {
      * components being constructed.
      * @param sprite
      */
-    public RenderComponent(TransformComponent transform, Texture sprite) {
+    public RenderComponent(Vector3 position, Vector2 dimensions, Texture sprite) {
 
-        super("RenderComponent");
+        // NOTE RenderComponent will be inaccessible from using string "RenderComponent" by design
+        // Cast TransformComponent to RenderComponent will get RenderComponent
+        super(position, dimensions);
         renderer = Renderer.getInstance();
         this.sprite = sprite;
 
@@ -35,21 +36,17 @@ public class RenderComponent extends Component {
         }
 
         addRenderGroup(renderGroup);
-
-        this.transform = transform;
     }
 
-    public RenderComponent(TransformComponent transform, Texture sprite, RenderGroup renderGroup) {
+    public RenderComponent(Vector3 position, Vector2 dimensions, Texture sprite, RenderGroup renderGroup) {
 
-        super("RenderComponent");
+        super(position, dimensions);
         renderer = Renderer.getInstance();
         this.sprite = sprite;
 
         this.renderGroup = renderGroup;
 
         addRenderGroup(renderGroup);
-
-        this.transform = transform;
     }
 
     protected void initRenderGroup() {
@@ -65,7 +62,11 @@ public class RenderComponent extends Component {
     }
 
     protected void addRenderGroup(RenderGroup renderGroup) {
-        renderer.addWorldRenderGroup(renderGroup);
+        addRenderGroupTyped(renderGroup, BatchType.WORLD);
+    }
+
+    protected void addRenderGroupTyped(RenderGroup renderGroup, BatchType batchType) {
+        renderer.addRenderGroup(renderGroup, batchType);
     }
 
     @Override
@@ -101,10 +102,6 @@ public class RenderComponent extends Component {
 
     public void setRenderGroup(RenderGroup renderGroup) {
         this.renderGroup = renderGroup;
-    }
-
-    public TransformComponent getTransform() {
-        return transform;
     }
 
     public Texture getSprite() {

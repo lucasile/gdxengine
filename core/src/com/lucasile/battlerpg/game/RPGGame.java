@@ -2,17 +2,20 @@ package com.lucasile.battlerpg.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.lucasile.battlerpg.engine.Engine;
 import com.lucasile.battlerpg.engine.camera.CameraWrapper;
-import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
-import com.lucasile.battlerpg.engine.ecs.component.components.UIComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.TransformComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.UIComponent;
 import com.lucasile.battlerpg.engine.ecs.entity.Entity;
 import com.lucasile.battlerpg.engine.ecs.entity.EntityManager;
 import com.lucasile.battlerpg.engine.ecs.entity.builder.builders.TexturedEntityBuilder;
 import com.lucasile.battlerpg.engine.ecs.entity.builder.builders.UIEntityBuilder;
 import com.lucasile.battlerpg.engine.main.Main;
+import com.lucasile.battlerpg.engine.math.VectorUtils;
 import com.lucasile.battlerpg.engine.settings.GameSettings;
 
 public class RPGGame implements Main {
@@ -28,6 +31,8 @@ public class RPGGame implements Main {
 
     private boolean firstLoop;
 
+    private ScreenViewport uiViewport;
+
     public RPGGame() {
         instance = this;
         engine = new Engine(this);
@@ -39,11 +44,13 @@ public class RPGGame implements Main {
 
         if (!firstLoop) {
 
-            EntityManager.addEntity(
-                    new UIEntityBuilder()
-                            .setPosition(new Vector3(50, 50, 50))
-                            .build()
-            );
+            uiViewport = engine.getGameScreen().getScreenViewport();
+
+            Entity ui = new UIEntityBuilder(uiViewport.getCamera())
+                    .setPosition(new Vector3(0, 0, -10))
+                    .build();
+
+            EntityManager.addEntity(ui);
 
             EntityManager.addEntity(
                     new TexturedEntityBuilder()
@@ -88,6 +95,8 @@ public class RPGGame implements Main {
         }
 
     }
+
+
 
     public Engine getEngine() {
         return engine;

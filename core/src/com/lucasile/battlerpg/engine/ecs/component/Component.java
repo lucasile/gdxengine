@@ -1,8 +1,6 @@
 package com.lucasile.battlerpg.engine.ecs.component;
 
-import com.lucasile.battlerpg.engine.ecs.entity.Entity;
-
-public abstract class Component {
+public class Component {
 
     private String name;
     private boolean active;

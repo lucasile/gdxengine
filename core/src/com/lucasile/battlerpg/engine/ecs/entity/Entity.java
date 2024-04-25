@@ -1,9 +1,9 @@
 package com.lucasile.battlerpg.engine.ecs.entity;
 
 import com.lucasile.battlerpg.engine.ecs.component.Component;
-import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
 
-import javax.xml.crypto.dsig.Transform;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.TransformComponent;
+
 import java.util.*;
 
 public class Entity {

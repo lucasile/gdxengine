@@ -1,6 +1,6 @@
 package com.lucasile.battlerpg.engine.rendering.groups;
 
-import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.RenderComponent;
 import com.lucasile.battlerpg.engine.rendering.RenderComponentComparator;
 
 import java.util.*;

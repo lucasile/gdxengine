@@ -1,9 +1,8 @@
-package com.lucasile.battlerpg.engine.ecs.component.components;
+package com.lucasile.battlerpg.engine.ecs.component.components.renderable;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.lucasile.battlerpg.engine.ecs.component.Component;
-import com.lucasile.battlerpg.engine.ecs.entity.Entity;
 
 public class TransformComponent extends Component {
 
@@ -16,8 +15,8 @@ public class TransformComponent extends Component {
         this.dimensions = dimensions;
     }
 
-    public TransformComponent() {
-        super("TransformComponent");
+    public TransformComponent(String componentName) {
+        super(componentName);
         this.position = Vector3.Zero;
         this.dimensions = Vector2.Zero;
     }

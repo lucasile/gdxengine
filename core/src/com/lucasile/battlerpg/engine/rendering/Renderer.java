@@ -1,10 +1,12 @@
 package com.lucasile.battlerpg.engine.rendering;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
-import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.RenderComponent;
+import com.lucasile.battlerpg.engine.math.VectorUtils;
 import com.lucasile.battlerpg.engine.rendering.groups.RenderGroup;
 
 import java.util.SortedSet;
@@ -29,12 +31,11 @@ public class Renderer {
         worldRenderGroups = new TreeSet<>(new RenderGroupComparator());
 
         for (BatchType batchType : BatchType.values()) {
+
             RenderGroup renderGroup = new RenderGroup(batchType.getId());
-            if (batchType == BatchType.UI) {
-                uiRenderGroups.add(renderGroup);
-            } else {
-                worldRenderGroups.add(renderGroup);
-            }
+
+            getRenderGroupsFromType(batchType).add(renderGroup);
+
         }
     }
 
@@ -51,20 +52,46 @@ public class Renderer {
 
             for (RenderComponent renderComponent : renderGroup.getActiveComponents()) {
 
-                TransformComponent transform = renderComponent.getTransform();
-                Vector3 position = transform.getPosition();
-                Vector2 dimensions = transform.getDimensions() ;
+                Vector3 position = renderComponent.getPosition();
+                Vector2 dimensions = renderComponent.getDimensions() ;
 
                 batch.draw(renderComponent.getSprite(), position.x, position.y, dimensions.x, dimensions.y);
             }
         }
     }
 
-    public void addUIRenderGroup(RenderGroup renderGroup) {
+    public void addRenderGroup(RenderGroup renderGroup, BatchType batchType) {
+
+        SortedSet<RenderGroup> group = getRenderGroupsFromType(batchType);
+
+        if (group == null)
+            return;
+
+        group.add(renderGroup);
+    }
+
+    private SortedSet<RenderGroup> getRenderGroupsFromType(BatchType batchType) {
+
+        switch (batchType) {
+
+            case UI:
+                return uiRenderGroups;
+
+            case WORLD:
+                return worldRenderGroups;
+
+            default:
+                return null;
+
+        }
+
+    }
+
+    private void addUIRenderGroup(RenderGroup renderGroup) {
         uiRenderGroups.add(renderGroup);
     }
 
-    public void addWorldRenderGroup(RenderGroup renderGroup) {
+    private void addWorldRenderGroup(RenderGroup renderGroup) {
         worldRenderGroups.add(renderGroup);
     }
 

@@ -3,8 +3,8 @@ package com.lucasile.battlerpg.engine.ecs.entity.builder.builders;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.lucasile.battlerpg.engine.ecs.component.components.RenderComponent;
-import com.lucasile.battlerpg.engine.ecs.component.components.TransformComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.RenderComponent;
+import com.lucasile.battlerpg.engine.ecs.component.components.renderable.TransformComponent;
 import com.lucasile.battlerpg.engine.ecs.entity.Entity;
 import com.lucasile.battlerpg.engine.ecs.entity.builder.EntityBuilder;
 import com.lucasile.battlerpg.engine.rendering.groups.RenderGroup;
@@ -41,10 +41,10 @@ public class TexturedEntityBuilder extends EntityBuilder {
         return this;
     }
 
-    protected RenderComponent createRenderComponent(TransformComponent transform) {
+    protected RenderComponent createRenderComponent(Vector3 position, Vector2 dimensions) {
         if (renderGroup == null)
-            return new RenderComponent(transform, texture);
-        return new RenderComponent(transform, texture, renderGroup);
+            return new RenderComponent(position, dimensions, texture);
+        return new RenderComponent(position, dimensions, texture, renderGroup);
     }
 
     @Override
@@ -59,11 +59,9 @@ public class TexturedEntityBuilder extends EntityBuilder {
         if (dimensions == null)
             dimensions = new Vector2(texture.getWidth(), texture.getHeight());
 
-        TransformComponent transform = new TransformComponent(position, dimensions);
+        RenderComponent renderComponent = createRenderComponent(position, dimensions);
 
-        RenderComponent renderComponent = createRenderComponent(transform);
-
-        setComponents(transform, renderComponent);
+        setComponents(renderComponent);
 
         return super.build();
     }
