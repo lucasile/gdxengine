@@ -96,8 +96,6 @@ public class RPGGame implements Main {
 
     }
 
-
-
     public Engine getEngine() {
         return engine;
     }
